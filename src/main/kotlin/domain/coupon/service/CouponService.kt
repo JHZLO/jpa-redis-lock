@@ -13,10 +13,15 @@ class CouponService(
     companion object {
         const val CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         const val COUPON_LENGTH = 10
+        const val MAX_COUPON_COUNT = 100
     }
 
     @Transactional
     fun createCoupon(): Coupon {
+        if (isValidTotalCouponCount()) {
+            throw IllegalArgumentException("쿠폰 한도 수량 소진")
+        }
+
         var couponValue: String
         do {
             couponValue = generateCouponValue()
@@ -34,5 +39,13 @@ class CouponService(
 
     private fun isDuplicatedCoupon(couponValue: String): Boolean {
         return couponRepository.existsByValue(couponValue)
+    }
+
+    private fun isValidTotalCouponCount(): Boolean {
+        return getCouponTotalCount() >= MAX_COUPON_COUNT
+    }
+
+    private fun getCouponTotalCount(): Long {
+        return couponRepository.count()
     }
 }
