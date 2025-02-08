@@ -6,4 +6,5 @@ import java.util.*
 
 interface CouponRepository: JpaRepository<Coupon, Long> {
     override fun findById(id: Long): Optional<Coupon>
+    fun existsByValue(value: String): Boolean
 }
