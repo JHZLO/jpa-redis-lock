@@ -2,6 +2,7 @@ package org.example.domain.user.service
 
 import jakarta.transaction.Transactional
 import org.example.domain.coupon.entity.Coupon
+import org.example.domain.coupon.repository.CouponRepository
 import org.example.domain.coupon.service.CouponService
 import org.example.domain.member.entity.User
 import org.example.domain.member.repository.UserRepository
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val couponRepository: CouponRepository,
     private val couponService: CouponService,
     private val passwordEncoder: PasswordEncoder
 ) {
@@ -31,6 +33,9 @@ class UserService(
 
     @Transactional
     fun applyCoupon(user: User): Coupon {
+        if (user.coupon != null){
+            return user.coupon!!
+        }
         val coupon = couponService.createCoupon()
         user.coupon = coupon
         userRepository.save(user)
