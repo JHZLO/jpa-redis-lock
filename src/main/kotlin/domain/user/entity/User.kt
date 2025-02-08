@@ -4,8 +4,8 @@ import jakarta.persistence.*
 import org.example.domain.coupon.entity.Coupon
 
 @Entity
-@Table(name = "member")
-class Member {
+@Table(name = "User")
+class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
