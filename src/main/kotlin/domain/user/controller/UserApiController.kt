@@ -1,6 +1,8 @@
 package org.example.domain.user.controller
 
 import jakarta.servlet.http.HttpSession
+import org.example.domain.coupon.dto.CouponResponse
+import org.example.domain.member.entity.User
 import org.example.domain.user.dto.LoginRequest
 import org.example.domain.user.dto.RegisterRequest
 import org.example.domain.user.dto.UserResponse
@@ -31,5 +33,15 @@ class UserApiController(
         } else {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보 유효하지 않음")
         }
+    }
+
+    @PostMapping("/apply/coupon")
+    fun applyCoupon(session: HttpSession): ResponseEntity<CouponResponse> {
+        val user = session.getAttribute("user") as? User
+            ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+
+        val coupon = userService.applyCoupon(user)
+        val response = CouponResponse(id = coupon.id, value = coupon.value)
+        return ResponseEntity.ok(response)
     }
 }
