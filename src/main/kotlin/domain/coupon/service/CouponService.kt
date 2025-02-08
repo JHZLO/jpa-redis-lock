@@ -16,6 +16,7 @@ class CouponService(
         const val MAX_COUPON_COUNT = 100
     }
 
+    // 쿠폰 생성하기
     @Transactional
     fun createCoupon(): Coupon {
         if (isValidTotalCouponCount()) {
@@ -47,5 +48,11 @@ class CouponService(
 
     private fun getCouponTotalCount(): Long {
         return couponRepository.count()
+    }
+
+    // 쿠폰 id로 조회하기
+    fun findById(id: Long): Coupon{
+        return couponRepository.findById(id)
+            .orElseThrow{NoSuchElementException("쿠폰 id 조회 안됨")}
     }
 }
