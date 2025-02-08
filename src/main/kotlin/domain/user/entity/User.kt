@@ -11,7 +11,7 @@ class User {
     val id: Long = 0L
 
     @Column(name = "email", unique = true)
-    val email: String = ""
+    var email: String = ""
 
     @Column(name = "password")
     var password: String = ""

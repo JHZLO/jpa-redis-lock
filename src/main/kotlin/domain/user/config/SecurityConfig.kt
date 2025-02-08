@@ -28,6 +28,12 @@ class SecurityConfig {
             .csrf {
                 it.disable()
             }
+            .authorizeHttpRequests {
+                it.anyRequest().permitAll()
+            }
+            .sessionManagement {
+                it.maximumSessions(1)
+            }
 
         return http.build()
     }
