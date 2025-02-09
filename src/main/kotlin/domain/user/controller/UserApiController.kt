@@ -2,10 +2,10 @@ package org.example.domain.user.controller
 
 import jakarta.servlet.http.HttpSession
 import org.example.domain.coupon.dto.CouponResponse
-import org.example.domain.member.entity.User
 import org.example.domain.user.dto.LoginRequest
 import org.example.domain.user.dto.RegisterRequest
 import org.example.domain.user.dto.UserResponse
+import org.example.domain.user.entity.User
 import org.example.domain.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

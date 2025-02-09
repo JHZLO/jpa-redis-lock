@@ -1,4 +1,4 @@
-package org.example.domain.member.entity
+package org.example.domain.user.entity
 
 import jakarta.persistence.*
 import org.example.domain.coupon.entity.Coupon

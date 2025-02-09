@@ -3,7 +3,7 @@ package org.example.domain.user.service
 import org.example.domain.coupon.entity.Coupon
 import org.example.domain.coupon.repository.CouponRepository
 import org.example.domain.coupon.service.CouponService
-import org.example.domain.member.entity.User
+import org.example.domain.user.entity.User
 import org.example.domain.member.repository.UserRepository
 import org.example.domain.user.dto.RegisterRequest
 import org.junit.jupiter.api.Assertions.*
