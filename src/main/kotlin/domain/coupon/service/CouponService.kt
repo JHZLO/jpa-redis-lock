@@ -3,6 +3,8 @@ package org.example.domain.coupon.service
 import jakarta.transaction.Transactional
 import org.example.domain.coupon.entity.Coupon
 import org.example.domain.coupon.repository.CouponRepository
+import org.springframework.cache.annotation.CachePut
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,6 +19,7 @@ class CouponService(
     }
 
     // 쿠폰 생성하기
+    @CachePut(value = ["couponCache"], key = "#result.id")
     @Transactional
     fun createCoupon(): Coupon {
         if (isValidTotalCouponCount()) {
@@ -51,6 +54,7 @@ class CouponService(
     }
 
     // 쿠폰 id로 조회하기
+    @Cacheable(value = ["couponCache"], key = "#id")
     fun findById(id: Long): Coupon{
         return couponRepository.findById(id)
             .orElseThrow{NoSuchElementException("쿠폰 id 조회 안됨")}

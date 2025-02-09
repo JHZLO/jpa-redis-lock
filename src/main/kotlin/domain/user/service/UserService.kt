@@ -33,9 +33,8 @@ class UserService(
 
     @Transactional
     fun applyCoupon(user: User): Coupon {
-        if (user.coupon != null){
-            return user.coupon!!
-        }
+        user.coupon?.let { return it }
+
         val coupon = couponService.createCoupon()
         user.coupon = coupon
         userRepository.save(user)
