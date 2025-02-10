@@ -1,8 +1,5 @@
 package org.example.domain.coupon.service
 
-import jakarta.persistence.EntityManager
-import jakarta.persistence.LockModeType
-import jakarta.persistence.PersistenceContext
 import jakarta.transaction.Transactional
 import org.example.domain.coupon.entity.Coupon
 import org.example.domain.coupon.repository.CouponRepository
@@ -24,7 +21,6 @@ class CouponService(
     @CachePut(value = ["couponCache"], key = "#result.id")
     @Transactional
     fun createCoupon(): Coupon {
-        couponRepository.lock()
         if (isValidTotalCouponCount()) {
             throw IllegalArgumentException("쿠폰 한도 수량 소진")
         }

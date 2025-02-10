@@ -19,4 +19,7 @@ class User {
     @OneToOne
     @JoinColumn(name = "coupon_id", referencedColumnName = "id")
     var coupon: Coupon? = null
+
+    @Version
+    val version: Long? = null
 }
