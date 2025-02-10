@@ -36,6 +36,10 @@ class UserService(
         user.coupon?.let { return it }
 
         val coupon = couponService.createCoupon()
+        if (coupon.id > 100) {
+            couponRepository.delete(coupon)
+            throw IllegalArgumentException("쿠폰 ID가 100을 초과했습니다. 발급이 중단됩니다.")
+        }
         user.coupon = coupon
         userRepository.save(user)
         return coupon;
