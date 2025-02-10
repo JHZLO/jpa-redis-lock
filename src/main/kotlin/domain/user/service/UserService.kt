@@ -31,7 +31,6 @@ class UserService(
         return if (passwordEncoder.matches(rawPassword, user.password)) user else null
     }
 
-    @Transactional
     fun applyCoupon(user: User): Coupon {
         user.coupon?.let { return it }
 

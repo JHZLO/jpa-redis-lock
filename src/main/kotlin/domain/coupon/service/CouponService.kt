@@ -1,5 +1,8 @@
 package org.example.domain.coupon.service
 
+import jakarta.persistence.EntityManager
+import jakarta.persistence.LockModeType
+import jakarta.persistence.PersistenceContext
 import jakarta.transaction.Transactional
 import org.example.domain.coupon.entity.Coupon
 import org.example.domain.coupon.repository.CouponRepository
@@ -11,7 +14,6 @@ import org.springframework.stereotype.Service
 class CouponService(
     private val couponRepository: CouponRepository
 ) {
-
     companion object {
         const val CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         const val COUPON_LENGTH = 10
@@ -22,17 +24,23 @@ class CouponService(
     @CachePut(value = ["couponCache"], key = "#result.id")
     @Transactional
     fun createCoupon(): Coupon {
+        couponRepository.lock()
         if (isValidTotalCouponCount()) {
             throw IllegalArgumentException("쿠폰 한도 수량 소진")
         }
 
+        val couponValue = generateUniqueCouponValue()
+        val coupon = Coupon(value = couponValue)
+        return couponRepository.save(coupon)
+    }
+
+    private fun generateUniqueCouponValue(): String {
         var couponValue: String
         do {
             couponValue = generateCouponValue()
         } while (isDuplicatedCoupon(couponValue))
-
-        val coupon = Coupon(value = couponValue)
-        return couponRepository.save(coupon)
+        println("생성된 쿠폰 값: $couponValue")
+        return couponValue
     }
 
     private fun generateCouponValue(): String {
@@ -55,8 +63,8 @@ class CouponService(
 
     // 쿠폰 id로 조회하기
     @Cacheable(value = ["couponCache"], key = "#id")
-    fun findById(id: Long): Coupon{
+    fun findById(id: Long): Coupon {
         return couponRepository.findById(id)
-            .orElseThrow{NoSuchElementException("쿠폰 id 조회 안됨")}
+            .orElseThrow { NoSuchElementException("쿠폰 id 조회 안됨") }
     }
 }
