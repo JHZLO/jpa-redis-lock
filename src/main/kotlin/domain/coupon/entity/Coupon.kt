@@ -12,4 +12,7 @@ class Coupon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
+
+    @Version
+    val version: Long? = null
 }
