@@ -1,23 +1,23 @@
 package org.example.domain.user.repository
 
-import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.stereotype.Component
-import java.time.Duration
+import org.redisson.api.RedissonClient
+import org.springframework.stereotype.Repository
+import java.util.concurrent.TimeUnit
 
-@Component
-class RedisLockRepository(private val redisTemplate: RedisTemplate<String, String>) {
 
+@Repository
+class RedisLockRepository(
+    private val redissonClient: RedissonClient
+) {
     fun lock(key: Long): Boolean {
-        return redisTemplate
-            .opsForValue()
-            .setIfAbsent(generateKey(key), "lock", Duration.ofMillis(3000)) == true
+        val lock = redissonClient.getLock("lock_key_$key")
+        return lock.tryLock(10, 1, TimeUnit.SECONDS)  // 락을 10초 동안 기다리고, 1초 동안 유지
     }
 
-    fun unlock(key: Long): Boolean {
-        return redisTemplate.delete(generateKey(key)) ?: false
-    }
-
-    private fun generateKey(key: Long): String {
-        return key.toString()
+    fun unlock(key: Long) {
+        val lock = redissonClient.getLock("lock_key_$key")
+        if (lock.isHeldByCurrentThread) {
+            lock.unlock()
+        }
     }
 }

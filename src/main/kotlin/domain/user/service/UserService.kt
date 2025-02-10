@@ -36,11 +36,11 @@ class UserService(
     @Transactional
     fun applyCoupon(user: User): Coupon {
         user.coupon?.let { return it }
-        val key: Long = 1 // 임의의 key 설정
-
-        while (!redisLockRepository.lock(key)) {
-            Thread.sleep(100);
+        val key: Long = user.id
+        if (!redisLockRepository.lock(key)) {
+            throw IllegalStateException("쿠폰 발급 중 잠금 획득에 실패했습니다.")
         }
+
         try {
             val coupon = couponService.createCoupon()
             if (coupon.id > 100) {
