@@ -45,6 +45,10 @@
 - [ ] 비관락을 사용하여 구현하기
 - [ ] 낙관락을 사용하여 구현하기
 - [ ] 분산락을 사용하여 구현하기
+  - [x] Redis Lettuce
+    - Spin Lock 방식
+  - [ ] Redis Redisson
+    - PUB/SUB 방식
 
 ---
 

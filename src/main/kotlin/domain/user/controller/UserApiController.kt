@@ -37,11 +37,15 @@ class UserApiController(
 
     @PostMapping("/apply/coupon")
     fun applyCoupon(session: HttpSession): ResponseEntity<CouponResponse> {
-        val user = session.getAttribute("user") as? User
-            ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        try {
+            val user = session.getAttribute("user") as? User
+                ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
-        val coupon = userService.applyCoupon(user)
-        val response = CouponResponse(id = coupon.id, value = coupon.value)
-        return ResponseEntity.ok(response)
+            val coupon = userService.applyCoupon(user)
+            val response = CouponResponse(id = coupon.id, value = coupon.value)
+            return ResponseEntity.ok(response)
+        } catch (e: Exception){
+            return ResponseEntity.status(404).build()
+        }
     }
 }
