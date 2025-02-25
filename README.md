@@ -1,4 +1,8 @@
-# JPA-Redis-Integration 과제
+<div align = center>
+
+# JPA-Redis-Lock
+  
+</div>
 
 ## 📜 문제
 ```text
